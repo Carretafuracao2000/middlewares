@@ -1,0 +1,129 @@
+### 1. Verificar se a API está funcionando
+GET http://localhost:3000/
+
+### Resposta esperada:
+# HTTP/1.1 200 OK
+# {
+#   "Mensagem": "API de Tarefas no ar!"
+# }
+
+
+### 2. Listar todas as tarefas
+GET http://localhost:3000/tarefas
+
+### Resposta esperada:
+# HTTP/1.1 200 OK
+# [
+#   {
+#     "id": 1,
+#     "titulo": "Lavar louça",
+#     "concluida": true
+#   },
+#   {
+#     "id": 2,
+#     "titulo": "Lavar a casa",
+#     "concluida": false
+#   },
+#   {
+#     "id": 3,
+#     "titulo": "Lavar roupa",
+#     "concluida": true
+#   }
+# ]
+
+
+### 3. Listar apenas tarefas concluídas
+GET http://localhost:3000/tarefas?concluida=true
+
+### Resposta esperada:
+# HTTP/1.1 200 OK
+# [
+#   {
+#     "id": 1,
+#     "titulo": "Lavar louça",
+#     "concluida": true
+#   },
+#   {
+#     "id": 3,
+#     "titulo": "Lavar roupa",
+#     "concluida": true
+#   }
+# ]
+
+
+### 4. Listar apenas tarefas não concluídas
+GET http://localhost:3000/tarefas?concluida=false
+
+### Resposta esperada:
+# HTTP/1.1 200 OK
+# [
+#   {
+#     "id": 2,
+#     "titulo": "Lavar a casa",
+#     "concluida": false
+#   }
+# ]
+
+
+### 5. Buscar uma tarefa pelo ID
+GET http://localhost:3000/tarefas/1
+
+### Resposta esperada:
+# HTTP/1.1 200 OK
+# {
+#   "id": 1,
+#   "titulo": "Lavar louça",
+#   "concluida": true
+# }
+
+
+### 6. Buscar uma tarefa que não existe
+GET http://localhost:3000/tarefas/999
+
+### Resposta esperada:
+# HTTP/1.1 404 Not Found
+# {
+#   "Error": "Tarefa não encontrado!"
+# }
+
+
+### 7. Criar uma nova tarefa
+POST http://localhost:3000/tarefas
+Content-Type: application/json
+Authorization: qualquer-coisa
+
+{
+    "titulo": "Estudar para a prova"
+}
+
+### Resposta esperada:
+# HTTP/1.1 201 Created
+# {
+#   "Mensagem": "Tarefa criado com sucesso!"
+# }
+
+
+### 8. Criar tarefa com título vazio
+POST http://localhost:3000/tarefas
+Content-Type: application/json
+Authorization: qualquer-coisa
+
+{
+    "titulo": ""
+}
+
+### Resposta esperada:
+# HTTP/1.1 400 Bad Request
+# {
+#   "Error": "Titulo inválido ou campo vazio"
+# }
+
+### 9. Criar uma tarefa sem ter um Authorization
+POST http://localhost:300tarefas
+Content-Type: application/json
+
+### Resposta esperada
+# HTTP/1.1 401 Unauthorized
+#{
+#   "Error": "Aunteticação necessária!"
+#}

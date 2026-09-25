@@ -54,6 +54,40 @@ app.get('/tarefas/:id', buscarTarefa, (req, res) => {
     res.json(req.tarefa)
 })
 
+function autenticar(req, res, next){
+    const token = req.headers.authorization
+
+    if(!token){
+        return res.status(401).json({Error: "Aunteticação necessária!"})
+    }
+
+    next()
+}
+
+function verficandoSeCampoNomeTaCerto(req, res, next){
+    const titulo = req.body.titulo
+
+    if(!titulo || typeof titulo != 'string' || !titulo.trim()){
+        return res.status(400).json({Error: 'Titulo inválido ou campo vazio'})
+    }
+
+    req.titulo = titulo
+
+    next()
+}
+
+function logger(req, res, next){
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`)
+    next()
+}
+
+app.post('/tarefas', [autenticar, verficandoSeCampoNomeTaCerto, logger], (req, res) => {
+    let novaTarefa = {id: proximoId++, titulo: req.titulo, concluida: false}
+
+    tarefas.push(novaTarefa)
+
+    res.status(201).json({Mensagem: 'Tarefa criado com sucesso!'})
+})
 
 app.listen(PORTA, () => {
     console.log(`Servidor rodando em http://localhost:${PORTA}`)
